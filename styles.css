@@ -36,10 +36,10 @@ input[type="text"]:focus { border-color: var(--accent); }
 .check { color: var(--accent); font-size: 1.25rem; font-weight: 800; }
 .empty { color: var(--muted); text-align: center; padding: 24px 8px; }
 .table-wrap { overflow: auto; border: 0; border-radius: 0; background: var(--panel); }
-.score-table { border-collapse: separate; border-spacing: 0; min-width: max-content; width: 100%; }
-th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: 104px; text-align: center; padding: 12px 9px; }
+.score-table { --round-column: 76px; --player-min: 104px; border-collapse: separate; border-spacing: 0; width: max(100%, calc(var(--round-column) + var(--player-count) * var(--player-min))); table-layout: fixed; }
+th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: var(--player-min); width: calc((100% - var(--round-column)) / var(--player-count)); text-align: center; padding: 12px 9px; }
 th { position: sticky; top: 0; z-index: 3; background: #1e2d46; vertical-align: bottom; }
-th:first-child, td:first-child { position: sticky; left: 0; z-index: 2; min-width: 76px; width: 76px; background: #172238; }
+th:first-child, td:first-child { position: sticky; left: 0; z-index: 2; min-width: var(--round-column); width: var(--round-column); background: #172238; }
 th:first-child { z-index: 4; }
 .controls-row td:first-child { position: static; }
 th:last-child, td:last-child { border-right: 0; }
@@ -67,4 +67,4 @@ th:last-child, td:last-child { border-right: 0; }
 .keypad-grid button { min-height: 54px; border-radius: 10px; background: #2c3c58; font-size: 1.25rem; font-weight: 800; }
 .keypad-grid button:active { background: var(--accent); color: #241b08; }
 .keypad-grid .keypad-ok { background: var(--accent); color: #241b08; }
-@media (max-width: 560px) { .app-shell { padding: 20px 10px 30px; } .card { padding: 12px; } .screen-header { align-items: flex-start; } .screen-header .secondary { padding: 9px 11px; } th, td { min-width: 70px; padding: 9px 5px; } th:first-child, td:first-child { min-width: 38px; width: 38px; } .player-name { font-size: .78rem; } .total { font-size: 1.1rem; } .round-score { font-size: 1.1rem; } .controls-row td { padding: 6px 4px; } .score-buttons button { min-height: 32px; } }
+@media (max-width: 560px) { .app-shell { padding: 20px 10px 30px; } .card { padding: 12px; } .screen-header { align-items: flex-start; } .screen-header .secondary { padding: 9px 11px; } .score-table { --round-column: 38px; --player-min: 70px; } th, td { padding: 9px 5px; } .player-name { font-size: .78rem; } .total { font-size: 1.1rem; } .round-score { font-size: 1.1rem; } .controls-row td { padding: 6px 4px; } .score-buttons button { min-height: 32px; } }
