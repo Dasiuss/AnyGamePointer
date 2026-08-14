@@ -37,7 +37,7 @@ input[type="text"]:focus { border-color: var(--accent); }
 .empty { color: var(--muted); text-align: center; padding: 24px 8px; }
 .table-wrap { overflow: auto; border: 0; border-radius: 0; background: var(--panel); }
 .score-table { --round-column: 76px; --player-min: 104px; border-collapse: separate; border-spacing: 0; width: max(100%, calc(var(--round-column) + var(--player-count) * var(--player-min))); table-layout: fixed; }
-th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: var(--player-min); width: calc((100% - var(--round-column)) / var(--player-count)); text-align: center; padding: 12px 9px; }
+th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: 0; width: auto; text-align: center; padding: 12px 9px; }
 th { position: sticky; top: 0; z-index: 3; background: #1e2d46; vertical-align: bottom; }
 th:first-child, td:first-child { position: sticky; left: 0; z-index: 2; min-width: var(--round-column); width: var(--round-column); background: #172238; }
 th:first-child { z-index: 4; }
@@ -57,6 +57,7 @@ th:last-child, td:last-child { border-right: 0; }
 .round-row td[data-action="open-keypad"]:active { background: #354a6e; }
 .bottom-actions { display: flex; justify-content: flex-end; margin-top: 16px; }
 .game-actions { padding: 0 12px; }
+.app-version { position: fixed; right: 12px; bottom: 10px; color: var(--muted); font-size: .75rem; opacity: .75; }
 .keypad-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; align-items: end; background: rgba(3, 8, 17, .66); }
 .keypad-backdrop[hidden] { display: none; }
 .keypad { width: min(100%, 430px); margin: 0 auto; padding: 18px 18px calc(18px + env(safe-area-inset-bottom)); border: 1px solid var(--line); border-bottom: 0; border-radius: 20px 20px 0 0; background: #1b2940; box-shadow: 0 -15px 45px rgba(0,0,0,.3); }
