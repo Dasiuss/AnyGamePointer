@@ -37,7 +37,7 @@ function showSelection() {
       <div class="player-list">${players.length ? players.map(player => `<button class="player-choice ${selectedIds.includes(player.id) ? 'selected' : ''}" data-action="toggle-player" data-id="${player.id}"><span>${escapeHtml(player.name)}</span><span class="check">${selectedIds.includes(player.id) ? '✓' : ''}</span></button>`).join('') : '<p class="empty">Dodaj pierwszego gracza.</p>'}</div>
       <div class="bottom-actions"><button class="primary" data-action="start-game" ${selectedIds.length ? '' : 'disabled'}>Rozpocznij grę</button></div>
     </div>
-    <small class="app-version">v6</small>
+    <small class="app-version">v8</small>
   </section>`;
 }
 function scoreFor(round, id) {
