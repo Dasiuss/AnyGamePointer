@@ -41,7 +41,7 @@ th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--lin
 th { position: sticky; top: 0; z-index: 3; background: #1e2d46; vertical-align: bottom; }
 th:first-child, td:first-child { position: sticky; left: 0; z-index: 2; min-width: var(--round-column); width: var(--round-column); background: #172238; }
 th:first-child { z-index: 4; }
-.controls-row td:first-child { position: static; }
+.controls-row td:first-child { position: static; min-width: 0; width: auto; }
 th:last-child, td:last-child { border-right: 0; }
 .player-name { display: block; overflow-wrap: anywhere; font-size: .9rem; }
 .total { display: block; color: var(--accent); font-size: 1.35rem; margin-top: 5px; }
