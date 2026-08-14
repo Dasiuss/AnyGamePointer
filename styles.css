@@ -15,6 +15,8 @@ body { margin: 0; min-width: 320px; background: radial-gradient(circle at 50% -1
 button, input { font: inherit; }
 button { border: 0; cursor: pointer; color: inherit; }
 .app-shell { min-height: 100vh; padding: 28px 18px 42px; }
+.game-screen { width: 100%; max-width: none; }
+body:has(.game-screen) .app-shell { padding: 0 0 18px; }
 .screen { width: min(100%, 980px); margin: 0 auto; }
 .screen-header { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 26px; }
 h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.35rem); letter-spacing: -.04em; }
@@ -33,7 +35,7 @@ input[type="text"]:focus { border-color: var(--accent); }
 .player-choice small { color: var(--muted); }
 .check { color: var(--accent); font-size: 1.25rem; font-weight: 800; }
 .empty { color: var(--muted); text-align: center; padding: 24px 8px; }
-.table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); }
+.table-wrap { overflow: auto; border: 0; border-radius: 0; background: var(--panel); }
 .score-table { border-collapse: separate; border-spacing: 0; min-width: max-content; width: 100%; }
 th, td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: 104px; text-align: center; padding: 12px 9px; }
 th { position: sticky; top: 0; z-index: 3; background: #1e2d46; vertical-align: bottom; }
@@ -48,11 +50,13 @@ th:last-child, td:last-child { border-right: 0; }
 .round-number button { background: transparent; color: var(--accent); font-size: 1.2rem; }
 .round-score { font-size: 1.35rem; font-weight: 800; }
 .controls-row td { background: #121d30; padding: 8px 5px; }
-.score-buttons { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.score-buttons button, .plus-button { min-height: 39px; border-radius: 7px; background: #31435f; font-weight: 800; }
-.score-buttons button:active, .plus-button:active { background: var(--accent); color: #241b08; }
-.plus-button { width: 100%; color: var(--accent); font-size: 1.2rem; }
+.score-buttons { display: flex; flex-direction: column; gap: 4px; }
+.score-buttons button { min-height: 35px; border-radius: 7px; background: #31435f; font-weight: 800; }
+.score-buttons button:active { background: var(--accent); color: #241b08; }
+.round-row td[data-action="open-keypad"] { cursor: pointer; }
+.round-row td[data-action="open-keypad"]:active { background: #354a6e; }
 .bottom-actions { display: flex; justify-content: flex-end; margin-top: 16px; }
+.game-actions { padding: 0 12px; }
 .keypad-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; align-items: end; background: rgba(3, 8, 17, .66); }
 .keypad-backdrop[hidden] { display: none; }
 .keypad { width: min(100%, 430px); margin: 0 auto; padding: 18px 18px calc(18px + env(safe-area-inset-bottom)); border: 1px solid var(--line); border-bottom: 0; border-radius: 20px 20px 0 0; background: #1b2940; box-shadow: 0 -15px 45px rgba(0,0,0,.3); }
@@ -63,4 +67,4 @@ th:last-child, td:last-child { border-right: 0; }
 .keypad-grid button { min-height: 54px; border-radius: 10px; background: #2c3c58; font-size: 1.25rem; font-weight: 800; }
 .keypad-grid button:active { background: var(--accent); color: #241b08; }
 .keypad-grid .keypad-ok { background: var(--accent); color: #241b08; }
-@media (max-width: 560px) { .app-shell { padding: 20px 10px 30px; } .card { padding: 12px; } .screen-header { align-items: flex-start; } .screen-header .secondary { padding: 9px 11px; } th, td { min-width: 96px; } }
+@media (max-width: 560px) { .app-shell { padding: 20px 10px 30px; } .card { padding: 12px; } .screen-header { align-items: flex-start; } .screen-header .secondary { padding: 9px 11px; } th, td { min-width: 70px; padding: 9px 5px; } th:first-child, td:first-child { min-width: 38px; width: 38px; } .player-name { font-size: .78rem; } .total { font-size: 1.1rem; } .round-score { font-size: 1.1rem; } .controls-row td { padding: 6px 4px; } .score-buttons button { min-height: 32px; } }
