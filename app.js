@@ -10,6 +10,17 @@ let keypadTarget = null;
 let keypadTargetRound = null;
 let keypadDraft = '';
 
+document.addEventListener('pointerdown', event => {
+  const target = event.target.closest('button, [data-action]');
+  if (!target) return;
+  if (typeof navigator.vibrate === 'function') navigator.vibrate(20);
+  target.classList.remove('tap-feedback');
+  requestAnimationFrame(() => {
+    target.classList.add('tap-feedback');
+    window.setTimeout(() => target.classList.remove('tap-feedback'), 140);
+  });
+});
+
 function loadState() {
   try { return { ...blankState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY)) }; }
   catch { return blankState(); }
