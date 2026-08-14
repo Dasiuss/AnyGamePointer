@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Prosty licznik punktów do gier">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>Any Game Pointer</title>
+</head>
+<body>
+  <main id="app" class="app-shell"></main>
+  <div id="keypad" class="keypad-backdrop" hidden>
+    <section class="keypad" role="dialog" aria-modal="true" aria-label="Wpisz punkty">
+      <div class="keypad-head">
+        <strong>Własna liczba punktów</strong>
+        <button class="icon-button" data-action="close-keypad" aria-label="Zamknij">&times;</button>
+      </div>
+      <output id="keypad-value" class="keypad-value">0</output>
+      <div class="keypad-grid">
+        <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button>
+        <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button>
+        <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button>
+        <button data-key="0">0</button><button data-key="backspace" aria-label="Usuń ostatnią cyfrę">&#9003;</button>
+        <button class="keypad-ok" data-key="ok">OK</button>
+      </div>
+    </section>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
