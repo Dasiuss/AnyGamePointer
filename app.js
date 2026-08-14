@@ -7,6 +7,7 @@ const blankState = () => ({ players: [], game: null });
 let state = loadState();
 let selectedIds = [];
 let keypadTarget = null;
+let keypadTargetRound = null;
 let keypadDraft = '';
 
 function loadState() {
@@ -25,7 +26,7 @@ function showSelection() {
       <div class="player-list">${players.length ? players.map(player => `<button class="player-choice ${selectedIds.includes(player.id) ? 'selected' : ''}" data-action="toggle-player" data-id="${player.id}"><span>${escapeHtml(player.name)}</span><span class="check">${selectedIds.includes(player.id) ? '✓' : ''}</span></button>`).join('') : '<p class="empty">Dodaj pierwszego gracza.</p>'}</div>
       <div class="bottom-actions"><button class="primary" data-action="start-game" ${selectedIds.length ? '' : 'disabled'}>Rozpocznij grę</button></div>
     </div>
-    <small class="app-version">v1.0.0</small>
+    <small class="app-version">v6</small>
   </section>`;
 }
 function scoreFor(round, id) {
@@ -38,15 +39,15 @@ function showGame() {
   const selected = state.game.selectedRound;
   app.innerHTML = `<section class="screen game-screen">
     <div class="table-wrap"><table class="score-table" style="--player-count: ${players.length}"><thead><tr><th>#</th>${players.map(player => `<th><span class="player-name">${escapeHtml(player.name)}</span><strong class="total">${totals[player.id]}</strong></th>`).join('')}</tr></thead><tbody>
-      ${state.game.rounds.map((round, index) => `<tr class="round-row ${selected === index ? 'selected' : ''}"><td rowspan="${selected === index ? 2 : 1}"><div class="round-number"><button data-action="select-round" data-round="${index}">${index + 1}</button>${index === state.game.rounds.length - 1 ? '<button data-action="add-round" aria-label="Dodaj rundę">+</button>' : ''}</div></td>${players.map(player => `<td data-action="open-keypad" data-player="${player.id}" aria-label="Zmień wynik gracza ${escapeHtml(player.name)} w rundzie ${index + 1}"><span class="round-score">${scoreFor(round, player.id)}</span></td>`).join('')}</tr>${selected === index ? `<tr class="controls-row">${players.map(player => `<td><div class="score-buttons">${[1,2,3,4,5,6,7].map(value => `<button data-action="set-score" data-player="${player.id}" data-score="${value}">${value}</button>`).join('')}</div></td>`).join('')}</tr>` : ''}`).join('')}
+      ${state.game.rounds.map((round, index) => `<tr class="round-row ${selected === index ? 'selected' : ''}"><td rowspan="${selected === index ? 2 : 1}"><div class="round-number"><button data-action="select-round" data-round="${index}">${index + 1}</button>${index === state.game.rounds.length - 1 ? '<button data-action="add-round" aria-label="Dodaj rundę">+</button>' : ''}</div></td>${players.map(player => `<td data-action="open-keypad" data-player="${player.id}" data-round="${index}" aria-label="Zmień wynik gracza ${escapeHtml(player.name)} w rundzie ${index + 1}"><span class="round-score">${scoreFor(round, player.id)}</span></td>`).join('')}</tr>${selected === index ? `<tr class="controls-row">${players.map(player => `<td><div class="score-buttons">${[1,2,3,4,5,6,7].map(value => `<button data-action="set-score" data-player="${player.id}" data-score="${value}">${value}</button>`).join('')}</div></td>`).join('')}</tr>` : ''}`).join('')}
     </tbody></table></div>
     <div class="bottom-actions game-actions"><button class="secondary" data-action="new-game">Nowa gra</button></div>
   </section>`;
 }
 function render() { state.game ? showGame() : showSelection(); }
 function newGame() { state.game = { playerIds: [...selectedIds], selectedRound: 0, rounds: [{ scores: Object.fromEntries(selectedIds.map(id => [id, 0])) }] }; saveState(); render(); }
-function updateScore(playerId, score) {
-  const round = state.game.rounds[state.game.selectedRound];
+function updateScore(playerId, score, roundIndex = state.game.selectedRound) {
+  const round = state.game.rounds[roundIndex];
   round.scores[playerId] = Number(score);
   const player = state.players.find(item => item.id === playerId);
   if (player) player.lastUsed = Date.now();
@@ -62,12 +63,12 @@ app.addEventListener('click', event => {
   if (action === 'add-round') { state.game.rounds.push({ scores: Object.fromEntries(state.game.playerIds.map(id => [id, 0])) }); state.game.selectedRound = state.game.rounds.length - 1; saveState(); render(); }
   if (action === 'set-score') updateScore(target.dataset.player, target.dataset.score);
   if (action === 'new-game' && confirm('Rozpocząć nową grę? Aktualne wyniki zostaną zastąpione.')) { state.game = null; selectedIds = []; saveState(); render(); }
-  if (action === 'open-keypad') openKeypad(target.dataset.player);
+  if (action === 'open-keypad') openKeypad(target.dataset.player, Number(target.dataset.round));
   if (action === 'close-keypad') closeKeypad();
 });
 app.addEventListener('submit', event => { if (!event.target.matches('[data-action="add-player"]')) return; event.preventDefault(); const input = event.target.elements.name; const name = input.value.trim(); if (!name) return; const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`; state.players.push({ id, name, lastUsed: 0, createdAt: Date.now() }); selectedIds.push(id); saveState(); render(); });
-keypad.addEventListener('click', event => { if (event.target === keypad) return closeKeypad(); if (event.target.closest('[data-action="close-keypad"]')) return closeKeypad(); const key = event.target.closest('[data-key]')?.dataset.key; if (!key) return; if (key === 'backspace') keypadDraft = keypadDraft.slice(0, -1); else if (key === 'ok') { updateScore(keypadTarget, keypadDraft === '' ? 0 : Number(keypadDraft)); return closeKeypad(); } else keypadDraft += key; keypadValue.textContent = keypadDraft || '0'; });
-function openKeypad(playerId) { keypadTarget = playerId; keypadDraft = ''; keypadValue.textContent = '0'; keypad.hidden = false; }
-function closeKeypad() { keypad.hidden = true; keypadTarget = null; keypadDraft = ''; }
+keypad.addEventListener('click', event => { if (event.target === keypad) return closeKeypad(); if (event.target.closest('[data-action="close-keypad"]')) return closeKeypad(); const key = event.target.closest('[data-key]')?.dataset.key; if (!key) return; if (key === 'backspace') keypadDraft = keypadDraft.slice(0, -1); else if (key === 'ok') { updateScore(keypadTarget, keypadDraft === '' ? 0 : Number(keypadDraft), keypadTargetRound); return closeKeypad(); } else keypadDraft += key; keypadValue.textContent = keypadDraft || '0'; });
+function openKeypad(playerId, roundIndex) { keypadTarget = playerId; keypadTargetRound = roundIndex; keypadDraft = ''; keypadValue.textContent = '0'; keypad.hidden = false; }
+function closeKeypad() { keypad.hidden = true; keypadTarget = null; keypadTargetRound = null; keypadDraft = ''; }
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
 render();
